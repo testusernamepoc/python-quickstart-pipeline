@@ -1,0 +1,7 @@
+[vbc_jumphost]
+127.0.0.1
+
+[vbc_vm:vars]
+ansible_user=
+ansible_password=
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

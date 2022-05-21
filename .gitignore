@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+ansible/group_vars/all
+ansible/hosts
 
 # C extensions
 *.so

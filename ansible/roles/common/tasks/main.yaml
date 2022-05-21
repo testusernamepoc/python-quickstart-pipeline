@@ -1,0 +1,30 @@
+---
+- name: Ensure fly is installed
+  shell: "which fly"
+  register: result
+  ignore_errors: true
+
+- fail:
+    msg: "Fly cli is not found! You need to install it first."
+  when: result.rc != 0
+
+- name: Transfer Concourse scripts
+  copy:
+    src: "./files/create_concourse.sh"
+    dest: "/home/guyzsarun/ansible/"
+    mode: "0777"
+
+- name: Transfer Concourse Pipeline
+  copy:
+    src: "./files/pipeline.yaml"
+    dest: "/home/guyzsarun/ansible/"
+    mode: "0777"
+
+- name: Transfer Github username file
+  copy:
+    src: "./files/github_username.txt"
+    dest: "/home/guyzsarun/ansible/"
+    mode: "0777"
+
+- name: Execute the script
+  command: chdir=/home/guyzsarun/ansible  ./create_concourse.sh github_username.txt {{ DOCKER.USERNAME }} {{ DOCKER.PASSWORD }}
