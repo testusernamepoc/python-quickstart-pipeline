@@ -1,0 +1,44 @@
+docker_credentials: &docker_credentials
+  username: ((docker.username))
+  password: ((docker.password))
+
+resources:
+  - name: image
+    type: registry-image
+    icon: docker
+    source:
+      <<: *docker_credentials
+      repository: snuntaviriya982/python-quickstart-pipeline
+      tag: ((github_username))
+
+  - name: python-quickstart-repo
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/((github_username))/python-quickstart-pipeline.git
+      branch: main
+
+jobs:
+  - name: build-and-push
+    plan:
+      - get: python-quickstart-repo
+      - task: build-task-image
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: vito/oci-build-task
+          inputs:
+            - name: python-quickstart-repo
+          outputs:
+            - name: image
+          params:
+            CONTEXT: python-quickstart-repo
+          run:
+            path: build
+
+      - put: image
+        params:
+          image: image/image.tar
