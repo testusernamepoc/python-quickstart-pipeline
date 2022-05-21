@@ -12,7 +12,7 @@ TEAM_NAME="poc-k8s"
 while read GITHUB_USER; do
     
     echo "Creating Pipeline for $GITHUB_USER"
-    fly -t $TEAM_NAME set-pipeline --pipeline $GITHUB_USER --config ./pipeline.yaml --var "docker.username=${GITHUB_USER}" --var "docker.password=${DOCKER_PASSWORD}" -n
+    fly -t $TEAM_NAME set-pipeline --pipeline $GITHUB_USER --config ./pipeline.yaml --var "docker.username=${DOCKER_USERNAME}" --var "docker.password=${DOCKER_PASSWORD}" --var "github_username=${GITHUB_USER}" -n
     fly -t $TEAM_NAME expose-pipeline --pipeline $GITHUB_USER
     fly -t $TEAM_NAME unpause-pipeline -p $GITHUB_USER
     
