@@ -22,6 +22,7 @@ jobs:
   - name: build-and-push
     plan:
       - get: python-quickstart-repo
+        trigger: true
       - task: build-task-image
         privileged: true
         config:
