@@ -8,6 +8,9 @@
     msg: "Fly cli is not found! You need to install it first."
   when: result.rc != 0
 
+- name: Login Concourse
+  shell: fly login -t {{ CONCOURSE.TARGET }} -c {{ CONCOURSE.URL }}  -u {{ CONCOURSE.USERNAME }} -p {{ CONCOURSE.PASSWORD }}
+
 - name: Transfer Concourse scripts
   copy:
     src: "./files/create_concourse.sh"
