@@ -4,9 +4,7 @@ metadata:
   name: {{ include "python-quickstart.fullname" . }}-proxy
 spec:
   routes:
-    - conditions:
-        - prefix: /{{ .Values.githubUsername }}
-      pathRewritePolicy:
+    - pathRewritePolicy:
         replacePrefix:
           - prefix: /{{ .Values.githubUsername }}
             replacement: /
