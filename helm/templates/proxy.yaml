@@ -1,0 +1,13 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: {{ include "python-quickstart.fullname" . }}-proxy
+spec:
+  routes:
+    - pathRewritePolicy:
+        replacePrefix:
+          - prefix: /{{ .Values.githubUsername }}
+            replacement: /
+      services:
+        - name: {{ include "python-quickstart.fullname" . }}
+          port: 8000

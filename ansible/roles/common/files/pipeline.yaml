@@ -2,10 +2,17 @@ docker_credentials: &docker_credentials
   username: ((docker.username))
   password: ((docker.password))
 
+resource_types:
+  - name: helm
+    type: docker-image
+    source:
+      repository: typositoire/concourse-helm3-resource
+
 resources:
-  - name: image
+  - name: container-image
     type: registry-image
     icon: docker
+    public: true
     source:
       <<: *docker_credentials
       repository: snuntaviriya982/python-quickstart-pipeline
@@ -14,9 +21,21 @@ resources:
   - name: python-quickstart-repo
     type: git
     icon: github
+    public: true
     source:
       uri: https://github.com/((github_username))/python-quickstart-pipeline.git
       branch: main
+
+  - name: kubernetes-cluster
+    type: helm
+    icon: kubernetes
+    public: true
+    source:
+      namespace: python-quickstart
+      release: ((github_username))
+      cluster_url: ((k8s.url))
+      cluster_ca: ((k8s.ca))
+      token: ((k8s.token))
 
 jobs:
   - name: build-and-push
@@ -39,7 +58,28 @@ jobs:
             CONTEXT: python-quickstart-repo
           run:
             path: build
-
-      - put: image
+      - put: container-image
         params:
           image: image/image.tar
+
+  - name: deploy-to-k8s
+    plan:
+      - get: python-quickstart-repo
+      - get: container-image
+        trigger: true
+        params:
+          skip_download: true
+        passed: [build-and-push]
+      - put: kubernetes-cluster
+        params:
+          chart: python-quickstart-repo/helm
+          values: python-quickstart-repo/helm/values.yaml
+          namespace: python-quickstart
+          release: ((github_username))
+          override_values:
+            - key: image.repository
+              value: snuntaviriya982/python-quickstart-pipeline
+            - key: image.tag
+              value: ((github_username))
+            - key: githubUsername
+              value: ((github_username))
