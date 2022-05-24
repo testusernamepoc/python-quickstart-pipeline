@@ -8,3 +8,8 @@ CONCOURSE:
   URL:
   USERNAME:
   PASSWORD:
+
+K8S:
+  URL:
+  CA:
+  TOKEN:

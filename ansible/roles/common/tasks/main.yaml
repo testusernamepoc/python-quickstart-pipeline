@@ -30,4 +30,4 @@
     mode: "0777"
 
 - name: Execute the script
-  command: chdir=/home/guyzsarun/ansible  ./create_concourse.sh github_username.txt {{ DOCKER.USERNAME }} {{ DOCKER.PASSWORD }}
+  command: chdir=/home/guyzsarun/ansible  ./create_concourse.sh github_username.txt {{ DOCKER.USERNAME }} {{ DOCKER.PASSWORD }} {{ K8S.URL }} {{ K8S.CA }} {{ K8S.TOKEN }} {{ CONCOURSE.TARGET }}
