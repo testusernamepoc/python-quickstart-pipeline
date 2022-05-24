@@ -24,7 +24,7 @@ resources:
     public: true
     source:
       uri: https://github.com/((github_username))/python-quickstart-pipeline.git
-      branch: feature/concourse-k8s
+      branch: main
 
   - name: kubernetes-cluster
     type: helm
