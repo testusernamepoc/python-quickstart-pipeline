@@ -76,6 +76,7 @@ jobs:
           values: python-quickstart-repo/helm/values.yaml
           namespace: python-quickstart
           release: ((github_username))
+          force: true
           override_values:
             - key: image.repository
               value: snuntaviriya982/python-quickstart-pipeline
